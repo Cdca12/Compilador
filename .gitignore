@@ -23,3 +23,6 @@
 hs_err_pid*
 /dist/
 /build/
+
+# Archivo generado tras compilación
+codigo.txt
