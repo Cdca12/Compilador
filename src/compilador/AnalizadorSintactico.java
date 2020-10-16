@@ -2,8 +2,8 @@ package compilador;
 
 import java.util.ArrayList;
 
-//import analizadorlexico.copy.Lista3;
-public class Sintactico<T> {
+
+public class AnalizadorSintactico {
 
     ArrayList<Token> tokenRC;
 
@@ -18,13 +18,13 @@ public class Sintactico<T> {
             truex = 17, falsex = 18, brackizq = 19, brackder = 20, div = 21, mas = 22, menos = 23, mult = 24, ifx = 25,
             num = 50, ID = 52; // bool = 21,
 
-    public Sintactico(ArrayList<Token> tokenRC) {
+    public AnalizadorSintactico(ArrayList<Token> tokenRC) {
         this.tokenRC = tokenRC;
         try {
             this.tok = this.tokenRC.get(0).getToken();
             this.type = this.tokenRC.get(0).getTipo();
         } catch (Exception e) {
-            Main.consola.append("El archivo est� vac�o");
+            CompiladorFrame.consola.append("El archivo está vacío");
         }
         Programa();
     }
@@ -39,8 +39,7 @@ public class Sintactico<T> {
     }
 
     public void eat(int esp) {
-        if (type == esp)
-        {
+        if (type == esp) {
             contando++;
             if (contando < tokenRC.size()) {
                 Advance();
@@ -244,17 +243,17 @@ public class Sintactico<T> {
     public void error(int type) {
         String tipo = ValoresInversos(type);
         if (type == 0) {
-            tipo = "\nError sint�ctico, se esperaba una expresi�n *class* al comienzo";
+            tipo = "\nError sintáctico, se esperaba una expresión *class* al comienzo";
         } else if (type == 1) {
-            tipo = "\nError sint�ctico en los límites, se encontró al menos un token después de la última llave cerrada, token ** "
+            tipo = "\nError sintáctico en los límites, se encontró al menos un token después de la última llave cerrada, token ** "
                     + tok + " ** en linea ** " + tokenRC.get(contando).getRenglon() + " **, No. de token ** "
                     + tokenRC.get(contando).getColumna() + " **";
         } else if (type == 2) {
-            tipo = "\nError sint�ctico en asignación, se esperaba un operador y operando antes de ** " + tok
+            tipo = "\nError sintáctico en asignación, se esperaba un operador y operando antes de ** " + tok
                     + " ** en linea ** " + tokenRC.get(contando).getRenglon() + " **, No. de token ** "
                     + tokenRC.get(contando).getColumna() + " **";
         } else if (type == 3) {
-            tipo = "\nError sintáctico en validaci�n, se esperaba un operador lógico en lugar de ** " + tok
+            tipo = "\nError sintáctico en validación, se esperaba un operador lógico en lugar de ** " + tok
                     + " ** en linea ** " + tokenRC.get(contando).getRenglon() + " **, No. de token ** "
                     + tokenRC.get(contando).getColumna() + " **";
         } else {
@@ -262,11 +261,11 @@ public class Sintactico<T> {
                     + tipo + " **";
         }
 
-        Main.consola.append(tipo);
+        CompiladorFrame.consola.append(tipo);
     }
 
     public void error() {
-        Main.consola.append("Error en la sintaxis, con el siguiente token ** " + tok + " ** en linea ** "
+        CompiladorFrame.consola.append("Error en la sintaxis, con el siguiente token ** " + tok + " ** en linea ** "
                 + tokenRC.get(contando).getRenglon() + " **, No. de token ** " + tokenRC.get(contando).getColumna()
                 + " **");
     }
@@ -298,7 +297,7 @@ public class Sintactico<T> {
                     // Aunque no se usa como tal el "!" solo, sirve para que no lance // error
                     "==", "<=", ">=", "!", "!=", "true", "false", "(", ")", "/", "+", "-", "*", "if"};
         if (type == 50) {
-            return devuelve = "num�rico";
+            return devuelve = "numérico";
         }
         if (type == 52) {
             return devuelve = "identificador";

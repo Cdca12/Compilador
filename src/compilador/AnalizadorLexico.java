@@ -6,22 +6,36 @@ import java.util.*;
 import java.util.regex.*;
 import javax.swing.JOptionPane;
 
-public class Analiza {
+public class AnalizadorLexico {
 
-    int renglon = 1, columna = 1, col2 = 0, cont = 0, contador = -1;
-    int retEQ = 0, retMayEQ = 0, retMenEQ = 0, retDif = 0;
-    boolean bandera = true;
-    ArrayList<String> resultado = new ArrayList<String>();
-    ArrayList<Token> tokenRC = new ArrayList<Token>();
+    private int renglon = 1, columna = 1, col2 = 0, cont = 0, contador = -1;
+    private int retEQ = 0, retMayEQ = 0, retMenEQ = 0, retDif = 0;
+    private boolean bandera = true;
+    private ArrayList<String> erroresLexicos;
+    private ArrayList<Token> tokenRC;
+    private String ruta;
 
-    public Analiza(String ruta) {
-        analizaCodigo(ruta);
+    public AnalizadorLexico(String ruta) {
+        erroresLexicos = new ArrayList<String>();
+        tokenRC = new ArrayList<Token>();
+        this.ruta = ruta;
+
+        analizar(this.ruta);
+
         if (bandera) /*{*/ {
-            resultado.add("No hay errores lexicos");
+            erroresLexicos.add("No hay errores lexicos");
         }
     }
 
-    public void analizaCodigo(String ruta) {
+    public ArrayList<String> getErroresLexicos() {
+        return erroresLexicos;
+    }
+
+    public ArrayList<Token> getTokenRC() {
+        return tokenRC;
+    }
+
+    private void analizar(String ruta) {
         String linea = "", token = "";
         StringTokenizer tokenizer;
         try {
@@ -38,6 +52,7 @@ public class Analiza {
                     columna++;
                     token = tokenizer.nextToken();
                     analizadorLexico(token);
+
                 }
                 linea = archivoEntrada.readLine();
                 renglon++;
@@ -62,15 +77,13 @@ public class Analiza {
             }
         }
         if (token.matches("^[0-9]?$")) {
-
             tipo = 50;
-
         }
         if (token.matches("^[0-9][0-9]?$")) {
             tipo = 50;
         }
         if (token.matches("^[0-9][0-9][0-9]+?$")) {//error en numeros
-            resultado.add("Error L�xico, se esperaba una longitud de 2 d�gitos en el n�mero \"" + token + "\" en la linea " + renglon + ", No. de token " + columna + " ");
+            erroresLexicos.add("Error Léxico, se esperaba una longitud de 2 dígitos en el número \"" + token + "\" en la linea " + renglon + ", No. de token " + columna + " ");
             tokenRC.add(new Token(token, renglon, columna, tipo));
             bandera = false;
             return;
@@ -82,15 +95,13 @@ public class Analiza {
             if (mat.find()) {
                 tipo = 52;
             } else {
-                resultado.add("Error L�xico en la linea \"" + renglon + "\" No. de token \"" + columna + "\" nombre del token \"" + token + "\", algunos signos no se admiten, los identificadores deben llevar al menos un n�mero al final");
+                erroresLexicos.add("Error Léxico en la linea \"" + renglon + "\" No. de token \"" + columna + "\" nombre del token \"" + token + "\", algunos signos no se admiten, los identificadores deben llevar al menos un número al final");
                 tokenRC.add(new Token(token, renglon, columna, tipo));
                 bandera = false;
                 return;
             }
         }
         tokenRC.add(new Token(token, renglon, columna, tipo));
-
-//		System.out.println(cont++ + " " +token);
     }
 
     public String espacios(String linea) {
@@ -142,7 +153,6 @@ public class Analiza {
             }
             contador--;
         }
-//		System.out.println("Antes de madar token, token vale = " + token);
         return token;
     }
 }
