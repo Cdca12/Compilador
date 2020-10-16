@@ -2,16 +2,12 @@ package compilador;
 
 import java.util.ArrayList;
 
-
 public class AnalizadorSintactico {
 
-    ArrayList<Token> tokenRC;
-
-    ArrayList<String> token;
-    ArrayList<Integer> tipo;
-    String tok = "", esperado = "";
-    int type, contando = 0, flag = 0;
-    String estructura = "";
+    private ArrayList<Token> tokenRC;
+    private String token = "", esperado = "";
+    private int tipo, contando = 0, flag = 0;
+    private String estructura = "";
 
     final int clase = 0, publico = 1, privado = 2, whilex = 3, entero = 4, booleano = 5, llaveizq = 6, llaveder = 7,
             EQ = 8, semi = 9, menor = 10, mayor = 11, d2EQ = 12, menorEQ = 13, mayorEQ = 14, diferente = 15, difEQ = 16,
@@ -21,196 +17,223 @@ public class AnalizadorSintactico {
     public AnalizadorSintactico(ArrayList<Token> tokenRC) {
         this.tokenRC = tokenRC;
         try {
-            this.tok = this.tokenRC.get(0).getToken();
-            this.type = this.tokenRC.get(0).getTipo();
+            this.token = this.tokenRC.get(0).getToken();
+            this.tipo = this.tokenRC.get(0).getTipo();
         } catch (Exception e) {
             CompiladorFrame.consola.append("El archivo está vacío");
         }
-        Programa();
+        analizar();
     }
 
-    public void Advance() {
+    public void avanzar() {
         try {
-            type = tokenRC.get(contando).getTipo();
-            tok = tokenRC.get(contando).getToken();
+            tipo = tokenRC.get(contando).getTipo();
+            token = tokenRC.get(contando).getToken();
         } catch (Exception e) {
 
         }
     }
 
-    public void eat(int esp) {
-        if (type == esp) {
+    public void consumir(int esp) {
+        if (tipo == esp) {
             contando++;
             if (contando < tokenRC.size()) {
-                Advance();
+                avanzar();
             }
         } else {
             error(esp);
         }
     }
 
-    public void Programa() {
-        if (type == publico || type == privado) {
-            eat(type);
+    public void analizar() {
+        if (tipo == publico || tipo == privado) {
+            consumir(tipo);
         }
-        eat(clase);
-        eat(ID);
-
-        eat(llaveizq);
-
-        while (type == publico || type == privado) {
-            eat(type);
-            Declaracion();
+        consumir(clase);
+        consumir(ID);
+        consumir(llaveizq);
+        while (tipo == publico || tipo == privado) {
+            consumir(tipo);
+            declararTipo();
         }
-        while (type == entero || type == booleano) {
-            Declaracion();
+        while (tipo == entero || tipo == booleano) {
+            declararTipo();
         }
-        if (this.type == whilex || this.type == ifx || this.type == entero || this.type == booleano) {
-            Statuto();
+        if (this.tipo == whilex || this.tipo == ifx || this.tipo == entero || this.tipo == booleano) {
+            status();
         }
-        eat(llaveder);
+        consumir(llaveder);
         if (contando < tokenRC.size()) {
             error(1);
         }
         estructura = "estructura correcta";
     }
 
-    public void Declaracion() {
-        String tok;
-        switch (type) {
+    public void declararTipo() {
+        String token = "";
+        switch (tipo) {
             case entero:
-                eat(entero);
-
-                tok = this.tok;
-                eat(ID);
-                if (type == EQ) {
-                    eat(EQ);
-
-                    if (type == num) {
-                        eat(num);
-                    } else if (type == falsex) {
-                        eat(falsex);
-                    } else // if(type == truex)
-                    {
-                        eat(truex);
+                consumir(entero);
+                token = this.token;
+                consumir(ID);
+                if (tipo == EQ) {
+                    consumir(EQ);
+                    if (tipo == num) {
+                        consumir(num);
+                    } else if (tipo == falsex) {
+                        consumir(falsex);
+                    } else {    // if(type == truex)
+                        consumir(truex);
                     }
                 }
-                eat(semi);
+                consumir(semi);
                 break;
             case booleano:
-                eat(booleano);
-                tok = this.tok;
-                eat(ID);
-                if (type == EQ) {
-                    eat(EQ);
-
-                    if (type == num) {
-                        eat(num);
-                    } else if (type == falsex) {
-                        eat(falsex);
+                consumir(booleano);
+                token = this.token;
+                consumir(ID);
+                if (tipo == EQ) {
+                    consumir(EQ);
+                    if (tipo == num) {
+                        consumir(num);
+                    } else if (tipo == falsex) {
+                        consumir(falsex);
                     } else // if(type == truex)
                     {
-                        eat(truex);
+                        consumir(truex);
                     }
                 }
-                eat(semi);
+                consumir(semi);
+                break;
+            // TODO: Añadir otro tipo
+//            case char:
+//                eat(char);
+//                tok = this.token;
+//                eat(ID);
+//                if (tipo == EQ) {
+//                    eat(EQ);
+//                    if (tipo == num) {
+//                        eat(num);
+//                    } else if (tipo == falsex) {
+//                        eat(falsex);
+//                    } else // if(type == truex)
+//                    {
+//                        eat(truex);
+//                    }
+//                }
+//                eat(semi);
+//                break;            // TODO: Añadir otro tipo
+//            case char:
+//                eat(char);
+//                tok = this.token;
+//                eat(ID);
+//                if (tipo == EQ) {
+//                    eat(EQ);
+//                    if (tipo == num) {
+//                        eat(num);
+//                    } else if (tipo == falsex) {
+//                        eat(falsex);
+//                    } else // if(type == truex)
+//                    {
+//                        eat(truex);
+//                    }
+//                }
+//                eat(semi);
+//                break;
 
         }
     }
 
     public void VarDeclarator() {
-        eat(EQ);
-
-        if (type == num) {
-            eat(num);
+        consumir(EQ);
+        if (tipo == num) {
+            consumir(num);
         }
 
-        if (type == falsex) {
-            eat(falsex);
+        if (tipo == falsex) {
+            consumir(falsex);
         }
 
-        if (type == truex) {
-            eat(truex);
+        if (tipo == truex) {
+            consumir(truex);
         }
     }
 
-    public void Statuto() {
-        switch (type) {
+    public void status() {
+        switch (tipo) {
             case ifx:
-                eat(ifx);
-                eat(brackizq);
+                consumir(ifx);
+                consumir(brackizq);
 
-                TestingExp();
-                eat(brackder);
+                checarExpresion();
+                
+                consumir(brackder);
+                consumir(llaveizq);
 
-                eat(llaveizq);
-
-                while (type == whilex || type == ifx || type == ID || type == booleano || type == entero) {
-                    Statuto(); // para llamar otro statement dentro del statement
+                while (tipo == whilex || tipo == ifx || tipo == ID || tipo == booleano || tipo == entero) {
+                    status(); // para llamar otro statement dentro del statement
                 }
-                eat(llaveder);
-
+                consumir(llaveder);
                 break;
 
             case whilex:
-                eat(whilex);
-                eat(brackizq);
+                consumir(whilex);
+                consumir(brackizq);
 
-                TestingExp();
-                eat(brackder);
-                eat(llaveizq);
-                while (type == whilex || type == ifx || type == booleano || type == entero || type == publico
-                        || type == privado) {
-                    Statuto(); // para llamar otro statement dentro del statement
+                checarExpresion();
+                
+                consumir(brackder);
+                consumir(llaveizq);
+                while (tipo == whilex || tipo == ifx || tipo == booleano || tipo == entero || tipo == publico
+                        || tipo == privado) {
+                    status(); // para llamar otro statement dentro del statement
                 }
-                eat(llaveder);
+                consumir(llaveder);
                 break;
             case ID:
-                eat(ID);
-                eat(EQ);
+                consumir(ID);
+                consumir(EQ);
 
-                ArithmeticExp();
-                eat(semi);
-                while (type == whilex || type == ifx || type == booleano || type == entero) {
-                    Statuto(); // para llamar otro statement dentro del statement
+                expresionAritmetica();
+                consumir(semi);
+                while (tipo == whilex || tipo == ifx || tipo == booleano || tipo == entero) {
+                    status(); // para llamar otro statement dentro del statement
                 }
                 break;
             case booleano:
-                Declaracion();
+                declararTipo();
                 break;
             case entero:
-                Declaracion();
+                declararTipo();
                 break;
             case publico:
-                eat(publico);
-                Declaracion();
+                consumir(publico);
+                declararTipo();
                 break;
             case privado:
-                eat(privado);
-                Declaracion();
+                consumir(privado);
+                declararTipo();
                 break;
             default:
                 error();
         }
     }
 
-    public void TestingExp() {
-
-        switch (type) {
+    public void checarExpresion() {
+        switch (tipo) {
             case ID:
-                if (type == ID) {
-                    eat(ID);
+                if (tipo == ID) {
+                    consumir(ID);
                 } else// if(type == num)
                 {
-                    eat(num);
+                    consumir(num);
                 }
-
-                if (LogicSimbols()) {
-                    if (type == ID) {
-                        eat(ID);
+                if (checarSimbolosLogicos()) {
+                    if (tipo == ID) {
+                        consumir(ID);
                     } else // if(type == num)
                     {
-                        eat(num);
+                        consumir(num);
                     }
                 }
                 break;
@@ -220,19 +243,13 @@ public class AnalizadorSintactico {
         }
     }
 
-    public void ArithmeticExp() {
-
-        switch (type) {
+    public void expresionAritmetica() {
+        switch (tipo) {
             case num:
-
-                eat(num);
-
-                 {
-                    if (OperandoSimbols()) {
-                        eat(num);
-                    }
+                consumir(num);
+                if (checarSimbolosOperando()) {
+                    consumir(num);
                 }
-
                 break;
             default:
                 error();
@@ -241,23 +258,23 @@ public class AnalizadorSintactico {
     }
 
     public void error(int type) {
-        String tipo = ValoresInversos(type);
+        String tipo = checarValoresInversos(type);
         if (type == 0) {
             tipo = "\nError sintáctico, se esperaba una expresión *class* al comienzo";
         } else if (type == 1) {
             tipo = "\nError sintáctico en los límites, se encontró al menos un token después de la última llave cerrada, token ** "
-                    + tok + " ** en linea ** " + tokenRC.get(contando).getRenglon() + " **, No. de token ** "
+                    + token + " ** en linea ** " + tokenRC.get(contando).getRenglon() + " **, No. de token ** "
                     + tokenRC.get(contando).getColumna() + " **";
         } else if (type == 2) {
-            tipo = "\nError sintáctico en asignación, se esperaba un operador y operando antes de ** " + tok
+            tipo = "\nError sintáctico en asignación, se esperaba un operador y operando antes de ** " + token
                     + " ** en linea ** " + tokenRC.get(contando).getRenglon() + " **, No. de token ** "
                     + tokenRC.get(contando).getColumna() + " **";
         } else if (type == 3) {
-            tipo = "\nError sintáctico en validación, se esperaba un operador lógico en lugar de ** " + tok
+            tipo = "\nError sintáctico en validación, se esperaba un operador lógico en lugar de ** " + token
                     + " ** en linea ** " + tokenRC.get(contando).getRenglon() + " **, No. de token ** "
                     + tokenRC.get(contando).getColumna() + " **";
         } else {
-            tipo = "\nError sintáctico en token ** " + tok + " ** se esperaba un token ** "
+            tipo = "\nError sintáctico en token ** " + token + " ** se esperaba un token ** "
                     + tipo + " **";
         }
 
@@ -265,15 +282,15 @@ public class AnalizadorSintactico {
     }
 
     public void error() {
-        CompiladorFrame.consola.append("Error en la sintaxis, con el siguiente token ** " + tok + " ** en linea ** "
+        CompiladorFrame.consola.append("Error en la sintaxis, con el siguiente token ** " + token + " ** en linea ** "
                 + tokenRC.get(contando).getRenglon() + " **, No. de token ** " + tokenRC.get(contando).getColumna()
                 + " **");
     }
 
-    public boolean LogicSimbols() {
-        if (type == menor || type == mayor || type == menorEQ || type == mayorEQ
-                || type == d2EQ/* type == mayor || type == dobleEQ || */) {
-            eat(type);
+    public boolean checarSimbolosLogicos() {
+        if (tipo == menor || tipo == mayor || tipo == menorEQ || tipo == mayorEQ
+                || tipo == d2EQ/* type == mayor || type == dobleEQ || */) {
+            consumir(tipo);
             return true;
         } else {
             error(3);
@@ -281,9 +298,9 @@ public class AnalizadorSintactico {
         return false;
     }
 
-    public boolean OperandoSimbols() {
-        if (type == menos || type == mas || type == div || type == mult) {
-            eat(type);
+    public boolean checarSimbolosOperando() {
+        if (tipo == menos || tipo == mas || tipo == div || tipo == mult) {
+            consumir(tipo);
             return true;
         } else {
             error(2);
@@ -291,19 +308,18 @@ public class AnalizadorSintactico {
         return false;
     }
 
-    public String ValoresInversos(int type) {
-        String devuelve,
-                cadenas[] = {"class", "public", "private", "while", "int", "boolean", "{", "}", "=", ";", "<", ">", // 12...
-                    // Aunque no se usa como tal el "!" solo, sirve para que no lance // error
-                    "==", "<=", ">=", "!", "!=", "true", "false", "(", ")", "/", "+", "-", "*", "if"};
-        if (type == 50) {
-            return devuelve = "numérico";
+    public String checarValoresInversos(int tipo) {
+        String cadenas[] = {
+            "class", "public", "private", "while", "int", "boolean", "{", "}", "=", ";", "<", ">", // 12...
+            // Aunque no se usa como tal el "!" solo, sirve para que no lance // error
+            "==", "<=", ">=", "!", "!=", "true", "false", "(", ")", "/", "+", "-", "*", "if"
+        };
+        if (tipo == 50) {
+            return "numérico";
         }
-        if (type == 52) {
-            return devuelve = "identificador";
+        if (tipo == 52) {
+            return "identificador";
         }
-        devuelve = cadenas[type];
-
-        return devuelve;
+        return cadenas[tipo];
     }
 }

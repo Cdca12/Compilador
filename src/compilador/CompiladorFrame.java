@@ -126,16 +126,16 @@ public class CompiladorFrame extends JFrame implements ActionListener {
 
         AnalizadorLexico analizadorLexico = new AnalizadorLexico("codigo.txt");
         ArrayList<String> erroresLexicos = analizadorLexico.getErroresLexicos();
-        AnalizadorSintactico s;
-
+        
         consola.setText("");
 
         for (int i = 0; i < erroresLexicos.size(); i++) {
             consola.append(erroresLexicos.get(i) + "\n");
         }
 
-        if (erroresLexicos.get(0).equals("No hay errores lexicos")) {
-            s = new AnalizadorSintactico(analizadorLexico.getTokenRC());
+        AnalizadorSintactico analizadorSintactico;
+        if (!analizadorLexico.getHayErrores()) {
+            analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokenRC());
         }
     }
 

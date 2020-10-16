@@ -10,7 +10,7 @@ public class AnalizadorLexico {
 
     private int renglon = 1, columna = 1, col2 = 0, cont = 0, contador = -1;
     private int retEQ = 0, retMayEQ = 0, retMenEQ = 0, retDif = 0;
-    private boolean bandera = true;
+    private boolean hayErrores = false;
     private ArrayList<String> erroresLexicos;
     private ArrayList<Token> tokenRC;
     private String ruta;
@@ -22,7 +22,7 @@ public class AnalizadorLexico {
 
         analizar(this.ruta);
 
-        if (bandera) /*{*/ {
+        if (!hayErrores) /*{*/ {
             erroresLexicos.add("No hay errores lexicos");
         }
     }
@@ -34,6 +34,11 @@ public class AnalizadorLexico {
     public ArrayList<Token> getTokenRC() {
         return tokenRC;
     }
+
+    public boolean getHayErrores() {
+        return hayErrores;
+    }
+    
 
     private void analizar(String ruta) {
         String linea = "", token = "";
@@ -85,7 +90,7 @@ public class AnalizadorLexico {
         if (token.matches("^[0-9][0-9][0-9]+?$")) {//error en numeros
             erroresLexicos.add("Error Léxico, se esperaba una longitud de 2 dígitos en el número \"" + token + "\" en la linea " + renglon + ", No. de token " + columna + " ");
             tokenRC.add(new Token(token, renglon, columna, tipo));
-            bandera = false;
+            hayErrores = true;
             return;
         }
 
@@ -97,7 +102,7 @@ public class AnalizadorLexico {
             } else {
                 erroresLexicos.add("Error Léxico en la linea \"" + renglon + "\" No. de token \"" + columna + "\" nombre del token \"" + token + "\", algunos signos no se admiten, los identificadores deben llevar al menos un número al final");
                 tokenRC.add(new Token(token, renglon, columna, tipo));
-                bandera = false;
+                hayErrores = true;
                 return;
             }
         }
