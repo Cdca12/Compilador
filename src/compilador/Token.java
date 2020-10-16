@@ -7,10 +7,10 @@ public class Token {
     private int columna;
     private int tipo;
 
-    public Token(String tok, int r, int c, int tipo) {
-        token = tok;
-        renglon = r;
-        columna = c;
+    public Token(String token, int renglon, int columna, int tipo) {
+        this.token = token;
+        this.renglon = renglon;
+        this.columna = columna;
         this.tipo = tipo;
     }
 
