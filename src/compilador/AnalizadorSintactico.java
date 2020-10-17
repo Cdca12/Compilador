@@ -1,6 +1,7 @@
 package compilador;
 
 import java.util.ArrayList;
+import utils.TipoToken;
 
 public class AnalizadorSintactico {
 
@@ -9,10 +10,6 @@ public class AnalizadorSintactico {
     private int tipo, contando = 0, flag = 0;
     private String estructura = "";
 
-    final int clase = 0, publico = 1, privado = 2, whilex = 3, entero = 4, booleano = 5, llaveizq = 6, llaveder = 7,
-            EQ = 8, semi = 9, menor = 10, mayor = 11, d2EQ = 12, menorEQ = 13, mayorEQ = 14, diferente = 15, difEQ = 16,
-            truex = 17, falsex = 18, brackizq = 19, brackder = 20, div = 21, mas = 22, menos = 23, mult = 24, ifx = 25,
-            num = 50, ID = 52; // bool = 21,
 
     public AnalizadorSintactico(ArrayList<Token> tokenRC) {
         this.tokenRC = tokenRC;
@@ -46,23 +43,23 @@ public class AnalizadorSintactico {
     }
 
     public void analizar() {
-        if (tipo == publico || tipo == privado) {
+        if (tipo == TipoToken.PUBLICO || tipo == TipoToken.PRIVADO) {
             consumir(tipo);
         }
-        consumir(clase);
-        consumir(ID);
-        consumir(llaveizq);
-        while (tipo == publico || tipo == privado) {
+        consumir(TipoToken.CLASE);
+        consumir(TipoToken.ID);
+        consumir(TipoToken.LLAVEIZQ);
+        while (tipo == TipoToken.PUBLICO || tipo == TipoToken.PRIVADO) {
             consumir(tipo);
             declararTipo();
         }
-        while (tipo == entero || tipo == booleano) {
+        while (tipo == TipoToken.ENTERO || tipo == TipoToken.BOOLEANO) {
             declararTipo();
         }
-        if (this.tipo == whilex || this.tipo == ifx || this.tipo == entero || this.tipo == booleano) {
+        if (this.tipo == TipoToken.WHILEX || this.tipo == TipoToken.IFX || this.tipo == TipoToken.ENTERO || this.tipo == TipoToken.BOOLEANO) {
             status();
         }
-        consumir(llaveder);
+        consumir(TipoToken.LLAVEDER);
         if (contando < tokenRC.size()) {
             error(1);
         }
@@ -72,48 +69,48 @@ public class AnalizadorSintactico {
     public void declararTipo() {
         String token = "";
         switch (tipo) {
-            case entero:
-                consumir(entero);
+            case TipoToken.ENTERO:
+                consumir(TipoToken.ENTERO);
                 token = this.token;
-                consumir(ID);
-                if (tipo == EQ) {
-                    consumir(EQ);
-                    if (tipo == num) {
-                        consumir(num);
-                    } else if (tipo == falsex) {
-                        consumir(falsex);
+                consumir(TipoToken.ID);
+                if (tipo == TipoToken.EQ) {
+                    consumir(TipoToken.EQ);
+                    if (tipo == TipoToken.NUM) {
+                        consumir(TipoToken.NUM);
+                    } else if (tipo == TipoToken.FALSEX) {
+                        consumir(TipoToken.FALSEX);
                     } else {    // if(type == truex)
-                        consumir(truex);
+                        consumir(TipoToken.TRUEX);
                     }
                 }
-                consumir(semi);
+                consumir(TipoToken.SEMI);
                 break;
-            case booleano:
-                consumir(booleano);
+            case TipoToken.BOOLEANO:
+                consumir(TipoToken.BOOLEANO);
                 token = this.token;
-                consumir(ID);
-                if (tipo == EQ) {
-                    consumir(EQ);
-                    if (tipo == num) {
-                        consumir(num);
-                    } else if (tipo == falsex) {
-                        consumir(falsex);
+                consumir(TipoToken.ID);
+                if (tipo == TipoToken.EQ) {
+                    consumir(TipoToken.EQ);
+                    if (tipo == TipoToken.NUM) {
+                        consumir(TipoToken.NUM);
+                    } else if (tipo == TipoToken.FALSEX) {
+                        consumir(TipoToken.FALSEX);
                     } else // if(type == truex)
                     {
-                        consumir(truex);
+                        consumir(TipoToken.TRUEX);
                     }
                 }
-                consumir(semi);
+                consumir(TipoToken.SEMI);
                 break;
             // TODO: Añadir otro tipo
 //            case char:
 //                eat(char);
 //                tok = this.token;
-//                eat(ID);
-//                if (tipo == EQ) {
-//                    eat(EQ);
-//                    if (tipo == num) {
-//                        eat(num);
+//                eat(TipoToken.ID);
+//                if (tipo == TipoToken.EQ) {
+//                    eat(TipoToken.EQ);
+//                    if (tipo == TipoToken.NUM) {
+//                        eat(TipoToken.NUM);
 //                    } else if (tipo == falsex) {
 //                        eat(falsex);
 //                    } else // if(type == truex)
@@ -121,16 +118,16 @@ public class AnalizadorSintactico {
 //                        eat(truex);
 //                    }
 //                }
-//                eat(semi);
+//                eat(TipoToken.SEMI);
 //                break;            // TODO: Añadir otro tipo
 //            case char:
 //                eat(char);
 //                tok = this.token;
-//                eat(ID);
-//                if (tipo == EQ) {
-//                    eat(EQ);
-//                    if (tipo == num) {
-//                        eat(num);
+//                eat(TipoToken.ID);
+//                if (tipo == TipoToken.EQ) {
+//                    eat(TipoToken.EQ);
+//                    if (tipo == TipoToken.NUM) {
+//                        eat(TipoToken.NUM);
 //                    } else if (tipo == falsex) {
 //                        eat(falsex);
 //                    } else // if(type == truex)
@@ -138,80 +135,80 @@ public class AnalizadorSintactico {
 //                        eat(truex);
 //                    }
 //                }
-//                eat(semi);
+//                eat(TipoToken.SEMI);
 //                break;
 
         }
     }
 
     public void VarDeclarator() {
-        consumir(EQ);
-        if (tipo == num) {
-            consumir(num);
+        consumir(TipoToken.EQ);
+        if (tipo == TipoToken.NUM) {
+            consumir(TipoToken.NUM);
         }
 
-        if (tipo == falsex) {
-            consumir(falsex);
+        if (tipo == TipoToken.FALSEX) {
+            consumir(TipoToken.FALSEX);
         }
 
-        if (tipo == truex) {
-            consumir(truex);
+        if (tipo == TipoToken.TRUEX) {
+            consumir(TipoToken.TRUEX);
         }
     }
 
     public void status() {
         switch (tipo) {
-            case ifx:
-                consumir(ifx);
-                consumir(brackizq);
+            case TipoToken.IFX:
+                consumir(TipoToken.IFX);
+                consumir(TipoToken.BRACKIZQ);
 
                 checarExpresion();
                 
-                consumir(brackder);
-                consumir(llaveizq);
+                consumir(TipoToken.BRACKDER);
+                consumir(TipoToken.LLAVEIZQ);
 
-                while (tipo == whilex || tipo == ifx || tipo == ID || tipo == booleano || tipo == entero) {
+                while (tipo == TipoToken.WHILEX || tipo == TipoToken.IFX || tipo == TipoToken.ID || tipo == TipoToken.BOOLEANO || tipo == TipoToken.ENTERO) {
                     status(); // para llamar otro statement dentro del statement
                 }
-                consumir(llaveder);
+                consumir(TipoToken.LLAVEDER);
                 break;
 
-            case whilex:
-                consumir(whilex);
-                consumir(brackizq);
+            case TipoToken.WHILEX:
+                consumir(TipoToken.WHILEX);
+                consumir(TipoToken.BRACKIZQ);
 
                 checarExpresion();
                 
-                consumir(brackder);
-                consumir(llaveizq);
-                while (tipo == whilex || tipo == ifx || tipo == booleano || tipo == entero || tipo == publico
-                        || tipo == privado) {
+                consumir(TipoToken.BRACKDER);
+                consumir(TipoToken.LLAVEIZQ);
+                while (tipo == TipoToken.WHILEX || tipo == TipoToken.IFX || tipo == TipoToken.BOOLEANO || tipo == TipoToken.ENTERO || tipo == TipoToken.PUBLICO
+                        || tipo == TipoToken.PRIVADO) {
                     status(); // para llamar otro statement dentro del statement
                 }
-                consumir(llaveder);
+                consumir(TipoToken.LLAVEDER);
                 break;
-            case ID:
-                consumir(ID);
-                consumir(EQ);
+            case TipoToken.ID:
+                consumir(TipoToken.ID);
+                consumir(TipoToken.EQ);
 
                 expresionAritmetica();
-                consumir(semi);
-                while (tipo == whilex || tipo == ifx || tipo == booleano || tipo == entero) {
+                consumir(TipoToken.SEMI);
+                while (tipo == TipoToken.WHILEX || tipo == TipoToken.IFX || tipo == TipoToken.BOOLEANO || tipo == TipoToken.ENTERO) {
                     status(); // para llamar otro statement dentro del statement
                 }
                 break;
-            case booleano:
+            case TipoToken.BOOLEANO:
                 declararTipo();
                 break;
-            case entero:
+            case TipoToken.ENTERO:
                 declararTipo();
                 break;
-            case publico:
-                consumir(publico);
+            case TipoToken.PUBLICO:
+                consumir(TipoToken.PUBLICO);
                 declararTipo();
                 break;
-            case privado:
-                consumir(privado);
+            case TipoToken.PRIVADO:
+                consumir(TipoToken.PRIVADO);
                 declararTipo();
                 break;
             default:
@@ -221,19 +218,19 @@ public class AnalizadorSintactico {
 
     public void checarExpresion() {
         switch (tipo) {
-            case ID:
-                if (tipo == ID) {
-                    consumir(ID);
-                } else// if(type == num)
+            case TipoToken.ID:
+                if (tipo == TipoToken.ID) {
+                    consumir(TipoToken.ID);
+                } else// if(type == TipoToken.NUM)
                 {
-                    consumir(num);
+                    consumir(TipoToken.NUM);
                 }
                 if (checarSimbolosLogicos()) {
-                    if (tipo == ID) {
-                        consumir(ID);
-                    } else // if(type == num)
+                    if (tipo == TipoToken.ID) {
+                        consumir(TipoToken.ID);
+                    } else // if(type == TipoToken.NUM)
                     {
-                        consumir(num);
+                        consumir(TipoToken.NUM);
                     }
                 }
                 break;
@@ -245,10 +242,10 @@ public class AnalizadorSintactico {
 
     public void expresionAritmetica() {
         switch (tipo) {
-            case num:
-                consumir(num);
+            case TipoToken.NUM:
+                consumir(TipoToken.NUM);
                 if (checarSimbolosOperando()) {
-                    consumir(num);
+                    consumir(TipoToken.NUM);
                 }
                 break;
             default:
@@ -288,8 +285,8 @@ public class AnalizadorSintactico {
     }
 
     public boolean checarSimbolosLogicos() {
-        if (tipo == menor || tipo == mayor || tipo == menorEQ || tipo == mayorEQ
-                || tipo == d2EQ/* type == mayor || type == dobleEQ || */) {
+        if (tipo == TipoToken.MENOR || tipo == TipoToken.MAYOR || tipo == TipoToken.MENOREQ || tipo == TipoToken.MAYOREQ
+                || tipo == TipoToken.D2EQ/* type == TipoToken.MAYOR || type == dobleTipoToken.EQ || */) {
             consumir(tipo);
             return true;
         } else {
@@ -299,7 +296,7 @@ public class AnalizadorSintactico {
     }
 
     public boolean checarSimbolosOperando() {
-        if (tipo == menos || tipo == mas || tipo == div || tipo == mult) {
+        if (tipo == TipoToken.MENOS || tipo == TipoToken.MAS || tipo == TipoToken.DIV || tipo == TipoToken.MULT) {
             consumir(tipo);
             return true;
         } else {
@@ -315,7 +312,7 @@ public class AnalizadorSintactico {
             "==", "<=", ">=", "!", "!=", "true", "false", "(", ")", "/", "+", "-", "*", "if"
         };
         if (tipo == 50) {
-            return "numérico";
+            return "TipoToken.NUMérico";
         }
         if (tipo == 52) {
             return "identificador";
