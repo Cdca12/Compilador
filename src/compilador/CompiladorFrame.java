@@ -133,10 +133,13 @@ public class CompiladorFrame extends JFrame implements ActionListener {
             consola.append(erroresLexicos.get(i) + "\n");
         }
 
-        AnalizadorSintactico analizadorSintactico;
         if (!analizadorLexico.getHayErrores()) {
-            analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokenRC());
+//            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokenRC());
         }
+        
+        // Análisis semántico
+        // TEST
+        new TablaSimbolosTest();
     }
 
     class PanelGradiente extends JPanel {
