@@ -1,6 +1,7 @@
 package views;
 
 import compilador.AnalizadorLexico;
+import compilador.AnalizadorSemantico;
 import compilador.TablaSimbolos;
 import views.TablaSimbolosView;
 
@@ -143,6 +144,14 @@ public class CompiladorFrame extends JFrame implements ActionListener {
         }
 
         TablaSimbolos tablaSimbolos = new TablaSimbolos(analizadorLexico.getTokenRC());
+
+        // Analizador semántico
+        AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(tablaSimbolos);
+        for (int i = 0; i < analizadorSemantico.getErroresSemanticos().size(); i++) {
+            consola.append(analizadorSemantico.getErroresSemanticos().get(i) + "\n");
+        }
+
+        // Mostramos la tabla de símbolos
         TablaSimbolosView tablaSimbolosView = new TablaSimbolosView(tablaSimbolos.getListaSimbolos());
         tablaSimbolosView.setVisible(true);
     }
