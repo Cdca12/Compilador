@@ -1,6 +1,7 @@
 package views;
 
 import compilador.AnalizadorLexico;
+import compilador.TablaSimbolos;
 import views.TablaSimbolosView;
 
 import java.awt.Color;
@@ -129,6 +130,7 @@ public class CompiladorFrame extends JFrame implements ActionListener {
 
         AnalizadorLexico analizadorLexico = new AnalizadorLexico("codigo.txt");
         ArrayList<String> erroresLexicos = analizadorLexico.getErroresLexicos();
+
         
         consola.setText("");
 
@@ -140,7 +142,8 @@ public class CompiladorFrame extends JFrame implements ActionListener {
 //            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokenRC());
         }
 
-        TablaSimbolosView tablaSimbolosView = new TablaSimbolosView(new ArrayList<>());
+        TablaSimbolos tablaSimbolos = new TablaSimbolos(analizadorLexico.getTokenRC());
+        TablaSimbolosView tablaSimbolosView = new TablaSimbolosView(tablaSimbolos.getListaSimbolos());
         tablaSimbolosView.setVisible(true);
     }
 

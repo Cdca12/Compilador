@@ -31,7 +31,7 @@ public class TablaSimbolos {
         Token token;
         for (int i = 0; i < this.tokenRC.size(); i++) {
             token = this.tokenRC.get(i);
-
+            simbolo = new Simbolo();
             // Obtenemos los datos del Token
             simbolo.setIdentificador(token.getToken());
             simbolo.setPosicion(token.getRenglon());
