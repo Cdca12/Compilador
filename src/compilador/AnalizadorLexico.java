@@ -73,7 +73,7 @@ public class AnalizadorLexico {
         if (token.equals("==") || token.equals(">=") || token.equals("<=") || token.equals("!=")) {
             return;
         }
-        String cadenas[] = {"class", "public", "private", "while", "int", "boolean", "{", "}", "=", ";", "<", ">", //12... Aunque no se usa como tal el "!" solo, sirve para que no lance error
+        String cadenas[] = {"class", "public", "private", "while", "int", "boolean","char","real", "{", "}", "=", ";", "<", ">", //12... Aunque no se usa como tal el "!" solo, sirve para que no lance error
             "==", "<=", ">=", "!", "!=", "true", "false", "(", ")", "/", "+", "-", "*", "if"};		//14   total = 26, de 0 al 25 + nums e id --> 0 - 27
         int tipo = -1;
         for (int i = 0; i < cadenas.length; i++) {
