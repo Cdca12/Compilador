@@ -1,5 +1,6 @@
-package compilador;
+package views;
 
+import compilador.AnalizadorLexico;
 import views.TablaSimbolosView;
 
 import java.awt.Color;

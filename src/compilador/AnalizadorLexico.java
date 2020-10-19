@@ -1,7 +1,8 @@
 package compilador;
 
+import utils.Token;
+
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.*;
 import javax.swing.JOptionPane;

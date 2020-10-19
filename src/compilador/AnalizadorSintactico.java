@@ -1,7 +1,10 @@
 package compilador;
 
 import java.util.ArrayList;
+
+import views.CompiladorFrame;
 import utils.TipoToken;
+import utils.Token;
 
 public class AnalizadorSintactico {
 

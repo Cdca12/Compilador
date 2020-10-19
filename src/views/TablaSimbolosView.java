@@ -1,7 +1,6 @@
 package views;
 
-import compilador.Simbolo;
-import compilador.TablaSimbolos;
+import utils.Simbolo;
 
 import javax.swing.*;
 import java.awt.*;

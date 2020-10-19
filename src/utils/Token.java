@@ -1,4 +1,4 @@
-package compilador;
+package utils;
 
 public class Token {
 
