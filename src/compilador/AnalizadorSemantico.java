@@ -4,6 +4,7 @@ import utils.Simbolo;
 import utils.TipoToken;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class AnalizadorSemantico {
     private ArrayList<Simbolo> listaSimbolos;
@@ -29,6 +30,7 @@ public class AnalizadorSemantico {
             }
 
         }
+            validarDeclaracion();
     }
 
     private boolean validarAsignacion(Simbolo simbolo) {
@@ -48,6 +50,17 @@ public class AnalizadorSemantico {
     private void añadirError(Simbolo simbolo) {
         erroresSemanticos.add("Error semántico en la línea " + simbolo.getPosicion() + ": tipos incompatibles. " +
                 simbolo.getValor() + " no puede ser convertido a " + simbolo.getTipoDato() + " en \"" + simbolo.getIdentificador() + "\"");
+    }
+
+    private void validarDeclaracion() {
+        for (Simbolo simbolo : listaSimbolos) {
+            if(simbolo.getTipoDato().equals("Indefinido")) {
+                erroresSemanticos.add("Error semántico en la línea " + simbolo.getPosicion() + ": variable no definida. " +
+                        "La variable \"" + simbolo.getIdentificador() + "\" no ha sido definida.");
+            }
+
+        }
+
     }
 
 

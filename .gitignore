@@ -26,3 +26,5 @@ hs_err_pid*
 
 # Archivo generado tras compilación
 codigo.txt
+
+src/compilador/TablaSimbolosTest.java

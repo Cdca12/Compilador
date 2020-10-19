@@ -48,8 +48,21 @@ public class TablaSimbolos {
                     simbolo.setTipoDato("Clase");
                     simbolo.setValor("");
                 } else {
+                    // Si no tiene valor asignado
                     simbolo.setTipoDato(this.tokenRC.get(i - 1).getToken());
-                    simbolo.setValor(this.tokenRC.get(i + 2).getToken());
+
+                    if (this.tokenRC.get(i + 1).getToken().equals(";")) {
+                        simbolo.setValor("null");
+                    } else { // No se le da da valor por default
+                        simbolo.setValor(this.tokenRC.get(i + 2).getToken());
+                    }
+
+                    if (!(this.tokenRC.get(i - 1).getToken().equals("int") || this.tokenRC.get(i - 1).getToken().equals("boolean"))) {
+                        simbolo.setTipoDato("Indefinido");
+                        simbolo.setValor("-");
+                    }
+
+
                 }
             } else if (esValor(token.getTipo())) {
                 simbolo.setTipoDato("Valor");
