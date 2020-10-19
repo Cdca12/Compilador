@@ -1,5 +1,7 @@
 package compilador;
 
+import views.TablaSimbolosView;
+
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -36,7 +38,7 @@ public class CompiladorFrame extends JFrame implements ActionListener {
     private void hazInterfaz() {
         setLayout(null);
         setUndecorated(true);
-        setSize(500, 700);
+        setSize(1000, 1000);
         setLocationRelativeTo(null);
         setShape(new RoundRectangle2D.Double(0, 0, 500, 700, 20, 20));
 
@@ -55,7 +57,7 @@ public class CompiladorFrame extends JFrame implements ActionListener {
         btnAbrir.addActionListener(this);
         btnCerrar = new JButton("X");
         btnCerrar.setBounds(440, 5, 40, 40);
-        btnCerrar.setBackground(Color.decode("#65417A"));
+        btnCerrar.setBackground(Color.decode("#FFFFFF"));
         btnCerrar.addActionListener(this);
 
         JScrollPane scrollPaneArea = new JScrollPane(area);
@@ -136,10 +138,9 @@ public class CompiladorFrame extends JFrame implements ActionListener {
         if (!analizadorLexico.getHayErrores()) {
 //            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(analizadorLexico.getTokenRC());
         }
-        
-        // Análisis semántico
-        // TEST
-        new TablaSimbolosTest();
+
+        TablaSimbolosView tablaSimbolosView = new TablaSimbolosView(new ArrayList<>());
+        tablaSimbolosView.setVisible(true);
     }
 
     class PanelGradiente extends JPanel {
@@ -149,9 +150,9 @@ public class CompiladorFrame extends JFrame implements ActionListener {
         @Override
         public void paint(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
-            g2.setPaint(new GradientPaint(0, 0, Color.decode("#5A415B"), 500, 50, Color.decode("#65417A")));
+            g2.setPaint(new GradientPaint(0, 0, Color.decode("#3333DD"), 500, 50, Color.decode("#4444EE")));
             g2.fillRect(0, 0, getWidth(), 50);
-            g2.setPaint(new GradientPaint(0, 0, Color.decode("#78415B"), 500, 700, Color.decode("#75417A")));
+            g2.setPaint(new GradientPaint(0, 0, Color.decode("#000000"), 500, 700, Color.decode("#444444")));
             g2.fillRect(0, 50, getWidth(), 670);
         }
     }
