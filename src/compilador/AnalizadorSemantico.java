@@ -3,8 +3,11 @@ package compilador;
 import utils.Simbolo;
 import utils.TipoToken;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 
 public class AnalizadorSemantico {
     private ArrayList<Simbolo> listaSimbolos;
@@ -30,7 +33,8 @@ public class AnalizadorSemantico {
             }
 
         }
-            validarDeclaracion();
+        validarDeclaracion();
+        validarDuplicados();
     }
 
     private boolean validarAsignacion(Simbolo simbolo) {
@@ -54,12 +58,32 @@ public class AnalizadorSemantico {
 
     private void validarDeclaracion() {
         for (Simbolo simbolo : listaSimbolos) {
-            if(simbolo.getTipoDato().equals("Indefinido")) {
+            if (simbolo.getTipoDato().equals("Indefinido")) {
                 erroresSemanticos.add("Error semántico en la línea " + simbolo.getPosicion() + ": variable no definida. " +
                         "La variable \"" + simbolo.getIdentificador() + "\" no ha sido definida.");
             }
-
         }
+    }
+
+    private void validarDuplicados() {
+        Set<String> listaIdentificadores = new HashSet<>();
+        ArrayList<Simbolo> listaDuplicados = new ArrayList<>();
+
+        for (int i = 0; i < listaSimbolos.size(); i++) {
+            if (listaSimbolos.get(i).getTipoDato().equals("int")
+                    || listaSimbolos.get(i).getTipoDato().equals("boolean")
+                    || listaSimbolos.get(i).getTipoDato().equals("Clase"))
+                if (!listaIdentificadores.add(listaSimbolos.get(i).getIdentificador())) {
+                    listaDuplicados.add(listaSimbolos.get(i));
+                }
+        }
+
+
+        for (Simbolo simbolo : listaDuplicados) {
+            erroresSemanticos.add("Error semántico en la línea " + simbolo.getPosicion() + ": variable ya declarada. " +
+                    "La variable \"" + simbolo.getIdentificador() + "\" ya ha sido declarada anteriormente.");
+        }
+
 
     }
 
