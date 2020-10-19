@@ -35,6 +35,7 @@ public class AnalizadorSemantico {
         }
         validarDeclaracion();
         validarDuplicados();
+        validarOperandoTiposCompatibles();
     }
 
     private boolean validarAsignacion(Simbolo simbolo) {
@@ -77,14 +78,39 @@ public class AnalizadorSemantico {
                     listaDuplicados.add(listaSimbolos.get(i));
                 }
         }
-
-
         for (Simbolo simbolo : listaDuplicados) {
             erroresSemanticos.add("Error semántico en la línea " + simbolo.getPosicion() + ": variable ya declarada. " +
                     "La variable \"" + simbolo.getIdentificador() + "\" ya ha sido declarada anteriormente.");
         }
+    }
 
-
+    // Error sintáctico
+    private void validarOperandoTiposCompatibles() {
+        Simbolo simbolo;
+        String operador;
+        for (int i = 0; i < listaSimbolos.size(); i++) {
+            simbolo = listaSimbolos.get(i);
+            if (simbolo.getTipoDato().equals("Operador") && !simbolo.getIdentificador().equals("=")) {
+                if (listaSimbolos.get(i - 1).getTipoDato().equals("Valor") && listaSimbolos.get(i + 1).getTipoDato().equals("Valor")) {
+                    if (listaSimbolos.get(i - 4).getIdentificador().equals("int")) {
+                        // Aritméticos
+                        if (!(simbolo.equals("+") || simbolo.equals("-")
+                                || simbolo.equals("*") || simbolo.equals("/"))) {
+                            erroresSemanticos.add("Error sintáctico en la línea " + simbolo.getPosicion() + ": operador de tipos compatibles. " +
+                                    "El operador usado en \"" + simbolo.getIdentificador() + "\" no es compatible con el tipo de dato " +
+                                    simbolo.getTipoDato() + ".");
+                        }
+                    } else if (listaSimbolos.get(i - 4).getIdentificador().equals("boolean")) {
+                        // Lógicos
+                        if (!(simbolo.equals("||") || simbolo.equals("&&"))) {
+                            erroresSemanticos.add("Error sintáctico en la línea " + simbolo.getPosicion() + ": operador de tipos compatibles. " +
+                                    "El operador \"" + simbolo.getIdentificador() + "\" no es compatible con el tipo de dato " +
+                                    listaSimbolos.get(i - 4).getIdentificador() + ".");
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

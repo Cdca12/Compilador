@@ -94,8 +94,9 @@ public class TablaSimbolos {
 
     private boolean esOperador(int tipoDato) {
         return tipoDato == TipoToken.EQ || tipoDato == TipoToken.MENOR || tipoDato == TipoToken.MAYOR
-                || tipoDato == TipoToken.D2EQ || tipoDato == TipoToken.MENOR || tipoDato == TipoToken.MENOREQ
-                || tipoDato == TipoToken.MAYOREQ || tipoDato == TipoToken.DIFERENTE || tipoDato == TipoToken.DIFEQ;
+                || tipoDato == TipoToken.D2EQ || tipoDato == TipoToken.MULT || tipoDato == TipoToken.MENOREQ
+                || tipoDato == TipoToken.DIV || tipoDato == TipoToken.MAYOREQ || tipoDato == TipoToken.DIFERENTE
+                || tipoDato == TipoToken.DIFEQ;
     }
 
     private boolean esCaracterEspecial(int tipoDato) {
