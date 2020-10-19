@@ -1,4 +1,4 @@
-package compilador;
+package utils;
 
 /**
  * @author Carlos Contreras
@@ -16,6 +16,13 @@ public class Simbolo {
         this.tipoDato = tipoDato;
         this.posicion = posicion;
         this.valor = valor;
+    }
+
+    public Simbolo() {
+        this.identificador = "";
+        this.tipoDato = "";
+        this.posicion = 0;
+        this.valor = "";
     }
 
     public String getIdentificador() {
