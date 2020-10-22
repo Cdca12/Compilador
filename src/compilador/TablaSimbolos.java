@@ -36,18 +36,21 @@ public class TablaSimbolos {
 
             simbolo = new Simbolo();
 
+
             // Obtenemos los datos del Token
             simbolo.setIdentificador(token.getToken());
             simbolo.setPosicion(token.getRenglon());
 
+
             // TODO: Validar futuros tipos de dato
             if (token.getTipo() == TipoToken.ENTERO || token.getTipo() == TipoToken.BOOLEANO) {
-                simbolo.setTipoDato("Tipo de Dato");
+//                simbolo.setTipoDato("Tipo de Dato");
             } else if (token.getTipo() == TipoToken.ID) {
-                if (this.tokenRC.get(i - 1).getToken().equals("class")) {
-                    simbolo.setTipoDato("Clase");
-                    simbolo.setValor("");
-                } else {
+//                if (this.tokenRC.get(i - 1).getToken().equals("class")) {
+//                    simbolo.setTipoDato("Clase");
+//                    simbolo.setValor("");
+//                }
+//                else {
                     // Si no tiene valor asignado
                     simbolo.setTipoDato(this.tokenRC.get(i - 1).getToken());
 
@@ -62,27 +65,34 @@ public class TablaSimbolos {
                         simbolo.setValor("-");
                     }
 
+                    if(this.tokenRC.get(i-1).getToken().equals("class")){
+                        simbolo.setValor("");
+                    }
 
-                }
-            } else if (esValor(token.getTipo())) {
-                simbolo.setTipoDato("Valor");
-                simbolo.setValor("");
-            } else {
-                if (sonLlaves(token.getTipo())) {
-                    simbolo.setTipoDato("Llaves");
-                    simbolo.setValor("");
-                } else if (esOperador(token.getTipo())) {
-                    simbolo.setTipoDato("Operador");
-                    simbolo.setValor("");
-                } else if (esCaracterEspecial(token.getTipo())) {
-                    simbolo.setTipoDato("Caracter especial");
-                    simbolo.setValor("");
-                } else {
-                    // Palabra reservada
-                    simbolo.setTipoDato("Palabra reservada");
-                }
+//                }
             }
-            listaSimbolos.add(simbolo);
+//            else if (esValor(token.getTipo())) {
+//                simbolo.setTipoDato("Valor");
+//                simbolo.setValor("");
+//            } else {
+//                if (sonLlaves(token.getTipo())) {
+//                    simbolo.setTipoDato("Llaves");
+//                    simbolo.setValor("");
+//                } else if (esOperador(token.getTipo())) {
+//                    simbolo.setTipoDato("Operador");
+//                    simbolo.setValor("");
+//                } else if (esCaracterEspecial(token.getTipo())) {
+//                    simbolo.setTipoDato("Caracter especial");
+//                    simbolo.setValor("");
+//                } else {
+//                    // Palabra reservada
+//                    simbolo.setTipoDato("Palabra reservada");
+//                }
+//            }
+
+            if(!simbolo.getValor().equals("") )
+                listaSimbolos.add(simbolo);
+
 
         }
 
