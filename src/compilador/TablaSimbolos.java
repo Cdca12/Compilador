@@ -7,6 +7,8 @@ import utils.Token;
 import java.util.Arrays;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class TablaSimbolos {
 
@@ -46,56 +48,53 @@ public class TablaSimbolos {
             if (token.getTipo() == TipoToken.ENTERO || token.getTipo() == TipoToken.BOOLEANO) {
 //                simbolo.setTipoDato("Tipo de Dato");
             } else if (token.getTipo() == TipoToken.ID) {
-//                if (this.tokenRC.get(i - 1).getToken().equals("class")) {
-//                    simbolo.setTipoDato("Clase");
-//                    simbolo.setValor("");
-//                }
-//                else {
-                    // Si no tiene valor asignado
-                    simbolo.setTipoDato(this.tokenRC.get(i - 1).getToken());
 
-                    if (this.tokenRC.get(i + 1).getToken().equals(";")) {
-                        simbolo.setValor("null");
-                    } else { // No se le da da valor por default
-                        simbolo.setValor(this.tokenRC.get(i + 2).getToken());
-                    }
+                // Si no tiene valor asignado
+                simbolo.setTipoDato(this.tokenRC.get(i - 1).getToken());
 
-                    if (!(this.tokenRC.get(i - 1).getToken().equals("int") || this.tokenRC.get(i - 1).getToken().equals("boolean"))) {
-                        simbolo.setTipoDato("Indefinido");
-                        simbolo.setValor("-");
-                    }
+                if (this.tokenRC.get(i + 1).getToken().equals(";")) {
+                    simbolo.setValor("null");
+                } else { // No se le da da valor por default
+                    simbolo.setValor(this.tokenRC.get(i + 2).getToken());
+                }
 
-                    if(this.tokenRC.get(i-1).getToken().equals("class")){
-                        simbolo.setValor("");
-                    }
+                // Si uno anterior es igual o un operador
+                if (this.tokenRC.get(i - 1).getToken().equals("=") && existeToken(this.tokenRC.get(i).getToken()) || esOperador(this.tokenRC.get(i - 1).getToken())) {
+                    continue;
+                }
 
-//                }
+                if (!(this.tokenRC.get(i - 1).getToken().equals("int") || this.tokenRC.get(i - 1).getToken().equals("boolean"))) {
+                    simbolo.setTipoDato("Indefinido");
+                    simbolo.setValor("-");
+                }
+
+                if (this.tokenRC.get(i - 1).getToken().equals("class")) {
+                    simbolo.setValor("");
+                }
+
             }
-//            else if (esValor(token.getTipo())) {
-//                simbolo.setTipoDato("Valor");
-//                simbolo.setValor("");
-//            } else {
-//                if (sonLlaves(token.getTipo())) {
-//                    simbolo.setTipoDato("Llaves");
-//                    simbolo.setValor("");
-//                } else if (esOperador(token.getTipo())) {
-//                    simbolo.setTipoDato("Operador");
-//                    simbolo.setValor("");
-//                } else if (esCaracterEspecial(token.getTipo())) {
-//                    simbolo.setTipoDato("Caracter especial");
-//                    simbolo.setValor("");
-//                } else {
-//                    // Palabra reservada
-//                    simbolo.setTipoDato("Palabra reservada");
-//                }
-//            }
 
-            if(!simbolo.getValor().equals("") )
+            if (!simbolo.getValor().equals(""))
                 listaSimbolos.add(simbolo);
-
 
         }
 
+    }
+
+    private boolean esOperador(String operador) {
+        String[] operadores = {"+", "-", "*", "/"};
+        List<String> listaOperadores = Arrays.asList(operadores);
+        return listaOperadores.contains(operador);
+    }
+
+    private boolean existeToken(String identificador) {
+
+        for (Simbolo simbolo : listaSimbolos) {
+            if (simbolo.getIdentificador().equals(identificador)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean sonLlaves(int tipoDato) {

@@ -1,0 +1,7 @@
+public class CodigoIntermedio {
+
+     int variable = 5;
+     int var = 10;
+     int res = variable + var * 3;
+
+}
