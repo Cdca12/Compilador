@@ -58,7 +58,30 @@ public class TablaSimbolos {
                     simbolo.setValor(this.tokenRC.get(i + 2).getToken());
                 }
 
-                // Si uno anterior es igual o un operador
+                //Si lo que continua despues de un '=' hasta un ';' es una sucesion de Operando y Operador
+                if (this.tokenRC.get(i - 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 1).getToken())){
+                    StringBuilder valor = new StringBuilder();
+//                    for (int k = i; !this.tokenRC.get(i).getToken().equals(";"); k++) {
+//                        valor.append(this.tokenRC.get(k).getToken()).append(" ");
+//                    }
+                    int k = i;
+                    while (this.tokenRC.get(k).getTipo() != TipoToken.SEMI){
+                        valor.append(this.tokenRC.get(k).getToken()).append(" ");
+                        k++;
+                    }
+
+//                    for(int k = i; esOperando(this.tokenRC.get(k).getTipo()) && esOperador(this.tokenRC.get(k+1).getToken()) ; k += 2){
+//                        valor.append(this.tokenRC.get(k).getToken()).append(" ").append(this.tokenRC.get(k + 1).getToken()).append(" ");
+//                    }
+                    String valorAux = valor.toString();
+                    simbolo.setValor(valorAux);
+                    System.out.println(valorAux);
+                }
+
+                //PENDIENTE: la tabla de simbolos no imprime el valor, a pesar de que en la consola si lo imprime como debe ser
+
+
+                // Si uno anterior es igual o un operador. Para validar si ya existe el identificador y esta definido
                 if (this.tokenRC.get(i - 1).getToken().equals("=") && existeToken(this.tokenRC.get(i).getToken()) || esOperador(this.tokenRC.get(i - 1).getToken())) {
                     continue;
                 }
@@ -85,6 +108,10 @@ public class TablaSimbolos {
         String[] operadores = {"+", "-", "*", "/"};
         List<String> listaOperadores = Arrays.asList(operadores);
         return listaOperadores.contains(operador);
+    }
+
+    private boolean esOperando(int operando){
+        return operando == TipoToken.ID || operando == TipoToken.NUM;
     }
 
     private boolean existeToken(String identificador) {
