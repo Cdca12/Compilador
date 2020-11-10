@@ -36,6 +36,7 @@ public class TablaSimbolos {
 
         for (int i = 0; i < this.tokenRC.size(); i++) {
 
+            boolean esExpresion = false;
             token = this.tokenRC.get(i);
             simbolo = new Simbolo();
 
@@ -49,9 +50,7 @@ public class TablaSimbolos {
 
             } else if(this.tokenRC.get(i).getTipo() == TipoToken.NUM){
                 if(this.tokenRC.get(i - 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 1).getToken())){
-                    String valor = hacerExpresion(i);
-                    System.out.println(valor);
-                    simbolo.setValor(valor);
+                    simbolo.setValor(hacerExpresion(i));
                 }
 
             } else if (token.getTipo() == TipoToken.ID ) {
@@ -66,19 +65,18 @@ public class TablaSimbolos {
                 }
 
                 //Si lo que continua despues de un '=' hasta un ';' es una expresión
-                if (this.tokenRC.get(i - 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 1).getToken())){
-                    String valor = hacerExpresion(i);
-                    System.out.println(valor);
-                    simbolo.setValor(valor);
+                if (this.tokenRC.get(i + 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 3).getToken())){
+                    simbolo.setValor(hacerExpresion(i));
+                    esExpresion = true;
                 }
 
 
                 // Si uno anterior es igual o un operador. Para validar si ya existe el identificador y esta definido
-                if (this.tokenRC.get(i - 1).getToken().equals("=") && existeToken(this.tokenRC.get(i).getToken()) || esOperador(this.tokenRC.get(i - 1).getToken())) {
+                if (!esExpresion && this.tokenRC.get(i - 1).getToken().equals("=") && existeToken(this.tokenRC.get(i).getToken()) || esOperador(this.tokenRC.get(i - 1).getToken())) {
                     continue;
                 }
 
-                if (!(this.tokenRC.get(i - 1).getToken().equals("int") || this.tokenRC.get(i - 1).getToken().equals("boolean"))) {
+                if (!esExpresion && !(this.tokenRC.get(i - 1).getToken().equals("int") || this.tokenRC.get(i - 1).getToken().equals("boolean"))) {
                     simbolo.setTipoDato("Indefinido");
                     simbolo.setValor("-");
                 }
@@ -91,7 +89,7 @@ public class TablaSimbolos {
 
 
 
-            if (!simbolo.getValor().equals(""))
+            if (!simbolo.getValor().equals("") && !simbolo.getTipoDato().equals(""))
                 listaSimbolos.add(simbolo);
 
         }
@@ -100,12 +98,12 @@ public class TablaSimbolos {
 
     private String hacerExpresion (int i) {
         StringBuilder valor = new StringBuilder();
-
-        int k = i;
+        int k = i + 2;
         while (this.tokenRC.get(k).getTipo() != TipoToken.SEMI){
             valor.append(this.tokenRC.get(k).getToken()).append(" ");
             k++;
         }
+
         return valor.toString();
     }
 
