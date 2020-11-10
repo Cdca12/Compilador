@@ -30,24 +30,31 @@ public class TablaSimbolos {
     }
 
     public void crearTablaSimbolos() {
-        Simbolo simbolo = new Simbolo();
 
+        Simbolo simbolo;
         Token token, tokenTipo, tokenValor;
+
         for (int i = 0; i < this.tokenRC.size(); i++) {
+
             token = this.tokenRC.get(i);
-
             simbolo = new Simbolo();
-
 
             // Obtenemos los datos del Token
             simbolo.setIdentificador(token.getToken());
             simbolo.setPosicion(token.getRenglon());
 
-
             // TODO: Validar futuros tipos de dato
             if (token.getTipo() == TipoToken.ENTERO || token.getTipo() == TipoToken.BOOLEANO) {
 //                simbolo.setTipoDato("Tipo de Dato");
-            } else if (token.getTipo() == TipoToken.ID) {
+
+            } else if(this.tokenRC.get(i).getTipo() == TipoToken.NUM){
+                if(this.tokenRC.get(i - 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 1).getToken())){
+                    String valor = hacerExpresion(i);
+                    System.out.println(valor);
+                    simbolo.setValor(valor);
+                }
+
+            } else if (token.getTipo() == TipoToken.ID ) {
 
                 // Si no tiene valor asignado
                 simbolo.setTipoDato(this.tokenRC.get(i - 1).getToken());
@@ -58,27 +65,12 @@ public class TablaSimbolos {
                     simbolo.setValor(this.tokenRC.get(i + 2).getToken());
                 }
 
-                //Si lo que continua despues de un '=' hasta un ';' es una sucesion de Operando y Operador
+                //Si lo que continua despues de un '=' hasta un ';' es una expresión
                 if (this.tokenRC.get(i - 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 1).getToken())){
-                    StringBuilder valor = new StringBuilder();
-//                    for (int k = i; !this.tokenRC.get(i).getToken().equals(";"); k++) {
-//                        valor.append(this.tokenRC.get(k).getToken()).append(" ");
-//                    }
-                    int k = i;
-                    while (this.tokenRC.get(k).getTipo() != TipoToken.SEMI){
-                        valor.append(this.tokenRC.get(k).getToken()).append(" ");
-                        k++;
-                    }
-
-//                    for(int k = i; esOperando(this.tokenRC.get(k).getTipo()) && esOperador(this.tokenRC.get(k+1).getToken()) ; k += 2){
-//                        valor.append(this.tokenRC.get(k).getToken()).append(" ").append(this.tokenRC.get(k + 1).getToken()).append(" ");
-//                    }
-                    String valorAux = valor.toString();
-                    simbolo.setValor(valorAux);
-                    System.out.println(valorAux);
+                    String valor = hacerExpresion(i);
+                    System.out.println(valor);
+                    simbolo.setValor(valor);
                 }
-
-                //PENDIENTE: la tabla de simbolos no imprime el valor, a pesar de que en la consola si lo imprime como debe ser
 
 
                 // Si uno anterior es igual o un operador. Para validar si ya existe el identificador y esta definido
@@ -97,11 +89,24 @@ public class TablaSimbolos {
 
             }
 
+
+
             if (!simbolo.getValor().equals(""))
                 listaSimbolos.add(simbolo);
 
         }
 
+    }
+
+    private String hacerExpresion (int i) {
+        StringBuilder valor = new StringBuilder();
+
+        int k = i;
+        while (this.tokenRC.get(k).getTipo() != TipoToken.SEMI){
+            valor.append(this.tokenRC.get(k).getToken()).append(" ");
+            k++;
+        }
+        return valor.toString();
     }
 
     private boolean esOperador(String operador) {
