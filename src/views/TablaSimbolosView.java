@@ -31,7 +31,6 @@ public class TablaSimbolosView extends JFrame {
 
 
         data = new Vector<>();
-//        llenarVector(listaTablaSimbolos);
         llenarVector(listaTablaSimbolos);
         Vector<String> headers = new Vector<>(Arrays.asList("Identificador", "Tipo de dato", "Posición", "Valor"));
         this.tablaSimbolos = new JTable(data, headers);

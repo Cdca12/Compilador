@@ -2,6 +2,7 @@ package views;
 
 import compilador.AnalizadorLexico;
 import compilador.AnalizadorSemantico;
+import compilador.CodigoIntermedio;
 import compilador.TablaSimbolos;
 import views.TablaSimbolosView;
 
@@ -154,6 +155,9 @@ public class CompiladorFrame extends JFrame implements ActionListener {
         // Mostramos la tabla de símbolos
         TablaSimbolosView tablaSimbolosView = new TablaSimbolosView(tablaSimbolos.getListaSimbolos());
         tablaSimbolosView.setVisible(true);
+
+        // Imprimir cuadruplos
+        new CodigoIntermedio(tablaSimbolos.getListaSimbolos());
     }
 
     class PanelGradiente extends JPanel {

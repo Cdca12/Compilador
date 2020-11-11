@@ -4,10 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Cdca/Documents/TecNM/7mo%20Semestre/Lenguajes%20y%20Autómatas%20II/Proyectos/Compilador/src/compilador/AnalizadorLexico.java</file>
-            <file>file:/D:/Cdca/Documents/TecNM/7mo%20Semestre/Lenguajes%20y%20Autómatas%20II/Proyectos/Compilador/src/compilador/CompiladorFrame.java</file>
             <file>file:/D:/Cdca/Documents/TecNM/7mo%20Semestre/Lenguajes%20y%20Autómatas%20II/Proyectos/Compilador/src/compilador/TablaSimbolosTest.java</file>
+            <file>file:/D:/Cdca/Documents/TecNM/7mo%20Semestre/Lenguajes%20y%20Autómatas%20II/Proyectos/Compilador/src/compilador/TablaSimbolos.java</file>
             <file>file:/D:/Cdca/Documents/TecNM/7mo%20Semestre/Lenguajes%20y%20Autómatas%20II/Proyectos/Compilador/src/compilador/Main.java</file>
-            <file>file:/D:/Cdca/Documents/TecNM/7mo%20Semestre/Lenguajes%20y%20Autómatas%20II/Proyectos/Compilador/src/compilador/Simbolo.java</file>
             <file>file:/D:/Cdca/Documents/TecNM/7mo%20Semestre/Lenguajes%20y%20Autómatas%20II/Proyectos/Compilador/src/compilador/AnalizadorSintactico.java</file>
         </group>
     </open-files>
