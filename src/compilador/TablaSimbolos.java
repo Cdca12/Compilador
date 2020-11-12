@@ -48,12 +48,12 @@ public class TablaSimbolos {
             if (token.getTipo() == TipoToken.ENTERO || token.getTipo() == TipoToken.BOOLEANO) {
 //                simbolo.setTipoDato("Tipo de Dato");
 
-            } else if(this.tokenRC.get(i).getTipo() == TipoToken.NUM){
-                if(this.tokenRC.get(i - 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 1).getToken())){
+            } else if (this.tokenRC.get(i).getTipo() == TipoToken.NUM) {
+                if (this.tokenRC.get(i - 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 1).getToken())) {
                     simbolo.setValor(hacerExpresion(i));
                 }
 
-            } else if (token.getTipo() == TipoToken.ID ) {
+            } else if (token.getTipo() == TipoToken.ID) {
 
                 // Si no tiene valor asignado
                 simbolo.setTipoDato(this.tokenRC.get(i - 1).getToken());
@@ -65,7 +65,7 @@ public class TablaSimbolos {
                 }
 
                 //Si lo que continua despues de un '=' hasta un ';' es una expresión
-                if (this.tokenRC.get(i + 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 3).getToken())){
+                if (this.tokenRC.get(i + 1).getToken().equals("=") && esOperador(this.tokenRC.get(i + 3).getToken())) {
                     simbolo.setValor(hacerExpresion(i));
                     esExpresion = true;
                 }
@@ -84,10 +84,7 @@ public class TablaSimbolos {
                 if (this.tokenRC.get(i - 1).getToken().equals("class")) {
                     simbolo.setValor("");
                 }
-
             }
-
-
 
             if (!simbolo.getValor().equals("") && !simbolo.getTipoDato().equals(""))
                 listaSimbolos.add(simbolo);
@@ -96,10 +93,10 @@ public class TablaSimbolos {
 
     }
 
-    private String hacerExpresion (int i) {
+    private String hacerExpresion(int i) {
         StringBuilder valor = new StringBuilder();
         int k = i + 2;
-        while (this.tokenRC.get(k).getTipo() != TipoToken.SEMI){
+        while (this.tokenRC.get(k).getTipo() != TipoToken.SEMI) {
             valor.append(this.tokenRC.get(k).getToken()).append(" ");
             k++;
         }
@@ -113,7 +110,7 @@ public class TablaSimbolos {
         return listaOperadores.contains(operador);
     }
 
-    private boolean esOperando(int operando){
+    private boolean esOperando(int operando) {
         return operando == TipoToken.ID || operando == TipoToken.NUM;
     }
 

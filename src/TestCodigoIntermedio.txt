@@ -2,7 +2,7 @@ public class CodigoIntermedio {
 
     int variable = 5;
     int var = 10;
-    int res = variable + var * 3;
-    int otro = var + 15 + var;
+    int res = variable + var * 3 + 15 / 10;
+    int otro = var + 15 / var;
 
 }

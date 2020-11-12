@@ -52,6 +52,7 @@ public class CodigoIntermedio {
 
     private void generarCuadruplos() {
         for (Expresion ex : listaExpresiones) {
+            cabeceraImpresion(ex);
             listaCuadruplos = new ArrayList<>();
             ArrayList<String> elementos = new ArrayList<>(Arrays.asList(ex.expresion.split("\\s+")));
             int contadorTmp = 1;
@@ -60,7 +61,7 @@ public class CodigoIntermedio {
                     generarCuadruplo(elementos, i, contadorTmp);
                     contadorTmp++;
                     i = -1;
-                } else if (elementos.get(i).equals("+") || elementos.get(i).equals("-")) {
+                } else if (!elementos.contains("/") && !elementos.contains("*")  && (elementos.get(i).equals("+") || elementos.get(i).equals("-"))) {
                     generarCuadruplo(elementos, i, contadorTmp);
                     contadorTmp++;
                     i = -1;
@@ -72,9 +73,9 @@ public class CodigoIntermedio {
                             ""              // Resultado
                     ));
                 }
-                imprimirTest();
-            }
 
+            }
+            cuerpoImpresion();
         }
     }
 
@@ -96,15 +97,19 @@ public class CodigoIntermedio {
 
     }
 
-    private void imprimirTest() {
+    private void cabeceraImpresion(Expresion ex){
+        System.out.println("---------- Expresión -----------------------------------------------------");
+        System.out.println(ex.id + " = " + ex.expresion);
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.printf("%15s %15s %15s %15s\n", "Operador", "Operando1", "Operando2", "Resultado");
+        System.out.println("--------------------------------------------------------------------------");
+    }
+
+    private void cuerpoImpresion() {
         for (Cuadruplo cuadruplo : listaCuadruplos) {
-            System.out.println(
-                cuadruplo.getOperador() + " " +
-                cuadruplo.getOperador1() + " " +
-                cuadruplo.getOperador2() + " " +
-                cuadruplo.getResultado() + " "
-            );
+            System.out.format("%15s %15s %15s %15s \n",cuadruplo.getOperador() , cuadruplo.getOperador1(), cuadruplo.getOperador2(), cuadruplo.getResultado());
         }
+        System.out.println("--------------------------------------------------------------------------");
     }
 
 }
